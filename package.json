@@ -24,7 +24,7 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mostafa-mansour1/previewAnyFile.git"
+        "url": "https://github.com/missive/cordova-plugin-preview-any-file.git"
     },
-    "homepage": "https://github.com/mostafa-mansour1/previewAnyFile"
+    "homepage": "https://github.com/missive/cordova-plugin-preview-any-file"
 }
