@@ -32,7 +32,8 @@
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <!-- previewPath downloads remote urls before handing them off to a viewer app. -->
+            <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
         <source-file src="src/android/PreviewAnyFile.java" target-dir="src/com/mostafa/previewanyfile" />
 
