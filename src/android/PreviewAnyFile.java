@@ -1,4 +1,4 @@
-package com.mostafa.previewanyfile;
+package com.missiveapp.previewanyfile;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;

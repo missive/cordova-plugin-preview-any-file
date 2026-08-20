@@ -28,17 +28,18 @@
         </config-file>
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="PreviewAnyFile">
-                <param name="android-package" value="com.mostafa.previewanyfile.PreviewAnyFile"/>
+                <param name="android-package" value="com.missiveapp.previewanyfile.PreviewAnyFile"/>
             </feature>
         </config-file>
         <config-file target="AndroidManifest.xml" parent="/*">
             <!-- previewPath downloads remote urls before handing them off to a viewer app. -->
             <uses-permission android:name="android.permission.INTERNET" />
         </config-file>
-        <source-file src="src/android/PreviewAnyFile.java" target-dir="src/com/mostafa/previewanyfile" />
+        <source-file src="src/android/PreviewAnyFile.java" target-dir="src/com/missiveapp/previewanyfile" />
+        <source-file src="src/android/PreviewAnyFileProvider.java" target-dir="src/com/missiveapp/previewanyfile" />
 
         <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <provider android:name="androidx.core.content.FileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
+            <provider android:name="com.missiveapp.previewanyfile.PreviewAnyFileProvider" android:authorities="${applicationId}.fileprovider" android:exported="false" android:grantUriPermissions="true">
                 <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths" />
             </provider>
         </config-file>
