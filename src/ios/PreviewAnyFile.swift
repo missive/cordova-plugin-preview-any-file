@@ -263,23 +263,34 @@ import CoreServices
     }
 
     func downloadfile(withName myUrl: String,fileName:String,completion: @escaping (_ success: Bool,_ fileLocation: URL? , _ callback : NSError?) -> Void){
-        let  url = myUrl.addingPercentEncoding(withAllowedCharacters:NSCharacterSet.urlQueryAllowed)!;
-        var itemUrl: URL? = Foundation.URL(string: url);
+        // Percent-encoding an already-encoded url turns each `%XX` into `%25XX`, breaking signed
+        // urls and any path holding an accent. Only encode when the string won't parse as-is.
+        var itemUrl = Foundation.URL(string: myUrl);
+        if itemUrl == nil, let encoded = myUrl.addingPercentEncoding(withAllowedCharacters: NSCharacterSet.urlQueryAllowed) {
+            itemUrl = Foundation.URL(string: encoded);
+        }
 
-        if FileManager.default.fileExists(atPath: itemUrl!.path) {
-            
-            if(itemUrl?.scheme == nil){
-                itemUrl = Foundation.URL(string: "file://\(url)");
+        guard var resolvedUrl = itemUrl else {
+            return completion(false, nil, self.previewError("Invalid file path"));
+        }
+
+        if FileManager.default.fileExists(atPath: resolvedUrl.path) {
+
+            if(resolvedUrl.scheme == nil){
+                resolvedUrl = Foundation.URL(fileURLWithPath: resolvedUrl.path);
             }
-            return completion(true, itemUrl,nil)
+            return completion(true, resolvedUrl,nil)
         }
 
         let documentsDirectoryURL =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         var disFileName = "";
         if(fileName.isEmpty){
-            disFileName = itemUrl?.lastPathComponent ?? "file.pdf";
+            disFileName = resolvedUrl.lastPathComponent;
         }else{
             disFileName = fileName;
+        }
+        if(disFileName.isEmpty){
+            disFileName = "file.pdf";
         }
         let destinationUrl = documentsDirectoryURL.appendingPathComponent(disFileName);
 
@@ -291,11 +302,21 @@ import CoreServices
                 completion(false, nil,error)
             }
         }
-        let downloadTask = URLSession.shared.downloadTask(with: itemUrl!, completionHandler: { (location, response, error) -> Void in
-            if error != nil{
-                completion(false, nil, error as NSError?)
+        let downloadTask = URLSession.shared.downloadTask(with: resolvedUrl, completionHandler: { (location, response, error) -> Void in
+            if let error = error {
+                return completion(false, nil, error as NSError)
             }
-            guard let tempLocation = location, error == nil else { return }
+
+            // A failed download still yields a body, so without this the error page gets previewed as the file.
+            let statusCode = (response as? HTTPURLResponse)?.statusCode ?? 200;
+            guard (200..<300).contains(statusCode) else {
+                return completion(false, nil, self.previewError("Download failed with HTTP \(statusCode)"))
+            }
+
+            guard let tempLocation = location else {
+                return completion(false, nil, self.previewError("Download produced no file"))
+            }
+
             do {
                 try FileManager.default.moveItem(at: tempLocation, to: destinationUrl)
                 completion(true, destinationUrl,nil)
@@ -307,6 +328,10 @@ import CoreServices
 
         downloadTask.resume();
 
+    }
+
+    func previewError(_ message: String) -> NSError {
+        return NSError(domain: "PreviewAnyFile", code: 0, userInfo: [NSLocalizedDescriptionKey: message]);
     }
 
     func dismissPreviewCallback(){
