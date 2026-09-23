@@ -14,7 +14,6 @@
             </feature>
         </config-file>
         <source-file src="src/ios/PreviewAnyFile.swift" />
-        <dependency id="cordova-plugin-add-swift-support" version="*" />
         <framework src="CoreServices.framework" />
     </platform>
 
