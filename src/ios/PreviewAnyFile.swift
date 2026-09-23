@@ -8,7 +8,7 @@ import CoreServices
     func preview(_command: CDVInvokedUrlCommand){
 
         var pluginResult = CDVPluginResult(
-            status: CDVCommandStatus_ERROR
+            status: CDVCommandStatus.error
         )
         tempCommandId = _command.callbackId;
 
@@ -25,10 +25,10 @@ import CoreServices
                     self.viewController?.present(previewController, animated: true, completion: nil);
                     if self.viewController!.isViewLoaded {
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_OK,
+                            status: CDVCommandStatus.ok,
                             messageAs: "SUCCESS"
                         );
-                        pluginResult?.keepCallback = true;
+                        pluginResult.keepCallback = true;
                         self.commandDelegate!.send(
                             pluginResult,
                             callbackId: _command.callbackId
@@ -36,7 +36,7 @@ import CoreServices
                     }
                     else{
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_ERROR,
+                            status: CDVCommandStatus.error,
                             messageAs: "FAILED"
                         );
                         self.commandDelegate!.send(
@@ -48,8 +48,8 @@ import CoreServices
 
             }else{
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_ERROR,
-                    messageAs: callback?.localizedDescription
+                    status: CDVCommandStatus.error,
+                    messageAs: callback?.localizedDescription ?? ""
                 );
                 self.commandDelegate!.send(
                     pluginResult,
@@ -64,7 +64,7 @@ import CoreServices
     @objc(previewPath:)
     func previewPath(_command: CDVInvokedUrlCommand){
         var pluginResult = CDVPluginResult(
-            status: CDVCommandStatus_ERROR
+            status: CDVCommandStatus.error
         )
         tempCommandId = _command.callbackId;
         var ext:String = "";
@@ -94,10 +94,10 @@ import CoreServices
                     self.viewController?.present(previewController, animated: true, completion: nil);
                     if self.viewController!.isViewLoaded {
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_OK,
+                            status: CDVCommandStatus.ok,
                             messageAs: "SUCCESS"
                         );
-                        pluginResult?.keepCallback = true;
+                        pluginResult.keepCallback = true;
                         self.commandDelegate!.send(
                             pluginResult,
                             callbackId: _command.callbackId
@@ -105,7 +105,7 @@ import CoreServices
                     }
                     else{
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_ERROR,
+                            status: CDVCommandStatus.error,
                             messageAs: "FAILED"
                         );
                         self.commandDelegate!.send(
@@ -117,8 +117,8 @@ import CoreServices
 
             }else{
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_ERROR,
-                    messageAs: callback?.localizedDescription
+                    status: CDVCommandStatus.error,
+                    messageAs: callback?.localizedDescription ?? ""
                 );
                 self.commandDelegate!.send(
                     pluginResult,
@@ -134,7 +134,7 @@ import CoreServices
     func previewBase64(_command: CDVInvokedUrlCommand){
 
         var pluginResult = CDVPluginResult(
-            status: CDVCommandStatus_ERROR
+            status: CDVCommandStatus.error
         )
         tempCommandId = _command.callbackId;
         var ext:String = "";
@@ -145,7 +145,7 @@ import CoreServices
 
         if(base64String.isEmpty){
             pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_ERROR,
+                status: CDVCommandStatus.error,
                 messageAs: "No Base64 code found"
             );
             self.commandDelegate!.send(
@@ -161,7 +161,7 @@ import CoreServices
 
         if(name.isEmpty && mimeType.isEmpty){
             pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_ERROR,
+                status: CDVCommandStatus.error,
                 messageAs: "You must define file name or mime type"
             );
             self.commandDelegate!.send(
@@ -185,7 +185,7 @@ import CoreServices
             let convertedData = Data(base64Encoded: base64String)
             else {
             pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_ERROR,
+                status: CDVCommandStatus.error,
                 messageAs: "base64 not valid"
             );
             self.commandDelegate!.send(
@@ -202,7 +202,7 @@ import CoreServices
         } catch {
 
             pluginResult = CDVPluginResult(
-                status: CDVCommandStatus_ERROR,
+                status: CDVCommandStatus.error,
                 messageAs: "cannot write the base64"
             );
             self.commandDelegate!.send(
@@ -226,10 +226,10 @@ import CoreServices
                     self.viewController?.present(previewController, animated: true, completion: nil);
                     if self.viewController!.isViewLoaded {
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_OK,
+                            status: CDVCommandStatus.ok,
                             messageAs: "SUCCESS"
                         );
-                        pluginResult?.keepCallback = true;
+                        pluginResult.keepCallback = true;
                         self.commandDelegate!.send(
                             pluginResult,
                             callbackId: _command.callbackId
@@ -237,7 +237,7 @@ import CoreServices
                     }
                     else{
                         pluginResult = CDVPluginResult(
-                            status: CDVCommandStatus_ERROR,
+                            status: CDVCommandStatus.error,
                             messageAs: "FAILED"
                         );
                         self.commandDelegate!.send(
@@ -249,8 +249,8 @@ import CoreServices
 
             }else{
                 pluginResult = CDVPluginResult(
-                    status: CDVCommandStatus_ERROR,
-                    messageAs: callback?.localizedDescription
+                    status: CDVCommandStatus.error,
+                    messageAs: callback?.localizedDescription ?? ""
                 );
                 self.commandDelegate!.send(
                     pluginResult,
@@ -336,7 +336,7 @@ import CoreServices
 
     func dismissPreviewCallback(){
         print(tempCommandId)
-        let pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "CLOSING");
+        let pluginResult = CDVPluginResult(status: CDVCommandStatus.ok, messageAs: "CLOSING");
         self.commandDelegate!.send(pluginResult, callbackId: tempCommandId);
     }
 
